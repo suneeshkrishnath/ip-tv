@@ -152,43 +152,36 @@ Alternatives:
 # 5. Project Structure
 
 ```text
-lib/
-
-├── app/
-│   ├── app.dart
-│   ├── routes.dart
-│
-├── core/
-│   ├── constants/
-│   ├── theme/
-│   ├── network/
-│   ├── utils/
-│
-├── features/
-│
-│   ├── channels/
-│   │   ├── domain/
-│   │   ├── data/
-│   │   ├── presentation/
-│   │
-│   ├── player/
-│   │   ├── domain/
-│   │   ├── data/
-│   │   ├── presentation/
-│   │
-│   ├── favorites/
-│   │
-│   ├── search/
-│   │
-│   ├── settings/
-│   │
-│   ├── epg/
-│
-├── shared/
-│   ├── widgets/
-│   ├── models/
-│
-└── main.dart
+project_root/
+├── docs/
+│   ├── IMPLEMENTATION_PLAN.md
+│   └── PROJECT_PLAN.md
+└── lib/
+    ├── app/
+    │   ├── app.dart
+    │   └── routes.dart
+    ├── core/
+    │   ├── constants/
+    │   ├── theme/
+    │   ├── network/
+    │   └── utils/
+    ├── features/
+    │   ├── channels/
+    │   │   ├── domain/
+    │   │   ├── data/
+    │   │   └── presentation/
+    │   ├── player/
+    │   │   ├── domain/
+    │   │   ├── data/
+    │   │   └── presentation/
+    │   ├── favorites/
+    │   ├── search/
+    │   ├── settings/
+    │   └── epg/
+    ├── shared/
+    │   ├── widgets/
+    │   └── models/
+    └── main.dart
 ```
 
 ---
