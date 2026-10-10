@@ -26,22 +26,22 @@ Use the filenames above exactly. Do not assume missing documents exist. If docum
 
 Complete stages in `TASK_TRACKER.md` order. Each stage is done only when its tasks are implemented, required tests pass, analysis is clean, and the tracker is accurately updated.
 
-| Stage | Copilot work | Completion check |
-|---|---|---|
-| 0 - Foundation | Create/verify the Flutter project, packages, analysis rules, repository setup, CI, docs, and development environment. | Flutter environment is verified; project builds and CI runs analysis/tests. |
-| 1 - Architecture Skeleton | Establish feature-first folders, centralized GoRouter, Material 3 themes, Riverpod, logging, and the Dio network layer. | App launches with routing and shared foundations configured. |
-| 2 - Domain Models | Define immutable Channel, Playlist, Favorite, and Program models using Freezed/JSON serialization as appropriate. | Model unit tests cover expected values and serialization. |
-| 3 - Playlist Engine | Implement download and parsing for both initial M3U sources below, preserving each channel's stream URL; validate data and cache it through the repository. | Each source can be fetched and parsed into channels with usable stream URLs; malformed/network/cache failures are handled and tested. |
-| 4 - Channel Browser | Show channels and categories; add search, loading/error/empty states, and documented reusable UI. Selecting a channel opens the in-app player. | Browser, filtering, search, and states work; selecting a channel passes the correct channel to the player. |
-| 5 - Video Player | Integrate media_kit, in-app stream startup, playback controls, fullscreen/orientation behavior, and stream error handling. | A known reachable authorized stream plays inside the app on Android and iOS; loading, playback, and failure states are tested. |
-| 6 - Favorites | Persist add/remove operations in Hive and provide the favorites view. Selecting a favorite opens its stream in the in-app player. | Favorites survive restart; selecting one plays the matching channel in-app; repository/UI behavior is tested. |
-| 7 - Recently Watched | Record playback history and display the most recent 20 channels. | History ordering, limit, persistence, and view are verified. |
-| 8 - Playlist Management | Add, edit, delete, and refresh user playlists. | Changes persist; refresh and failure cases are covered. |
-| 9 - EPG Integration | Parse XMLTV data, associate programs with channels, and show current/next programs and schedules. | Time/channel matching and parser edge cases are tested. |
-| 10 - Offline Support | Support cached startup and the planned channel, logo, and EPG caches. | Cached data is usable offline and cache failures are handled. |
-| 11 - Settings | Implement theme selection, playlist refresh, cache clearing, and app information. | Settings persist where applicable and actions have clear success/error states. |
-| 12 - Production Hardening | Complete performance and security review, required analytics/crash reporting, and release-candidate checks. | Build, tests, analysis, privacy/security review, and release-candidate checks pass. |
-| 13 - Store Deployment | Prepare Android AAB and iOS IPA, testing tracks, and store submissions. | Deliverables are ready; submit or publish only with explicit user authorization. |
+| Stage | Status | Copilot work | Completion check |
+|---|---|---|---|
+| 0 - Foundation | IN PROGRESS | Create/verify the Flutter project, packages, analysis rules, repository setup, CI, docs, and development environment. | Flutter environment is verified; project builds and CI runs analysis/tests. |
+| 1 - Architecture Skeleton | COMPLETE | Establish feature-first folders, centralized GoRouter, Material 3 themes, Riverpod, logging, and the Dio network layer. | App launches with routing and shared foundations configured. |
+| 2 - Domain Models | COMPLETE | Define immutable Channel, Playlist, Favorite, and Program models using Freezed/JSON serialization as appropriate. | Model unit tests cover expected values and serialization. |
+| 3 - Playlist Engine | COMPLETE | Implement download and parsing for both initial M3U sources below, preserving each channel's stream URL; validate data and cache it through the repository. | Each source can be fetched and parsed into channels with usable stream URLs; malformed/network/cache failures are handled and tested. |
+| 4 - Channel Browser | COMPLETE | Show channels and categories; add search, loading/error/empty states, and documented reusable UI. Selecting a channel opens the in-app player. | Browser, filtering, search, and states work; selecting a channel passes the correct channel to the player. |
+| 5 - Video Player | IN PROGRESS | Integrate media_kit, in-app stream startup, playback controls, fullscreen/orientation behavior, and stream error handling. | A known reachable authorized stream plays inside the app on Android and iOS; loading, playback, and failure states are tested. |
+| 6 - Favorites | NOT STARTED | Persist add/remove operations in Hive and provide the favorites view. Selecting a favorite opens its stream in the in-app player. | Favorites survive restart; selecting one plays the matching channel in-app; repository/UI behavior is tested. |
+| 7 - Recently Watched | NOT STARTED | Record playback history and display the most recent 20 channels. | History ordering, limit, persistence, and view are verified. |
+| 8 - Playlist Management | NOT STARTED | Add, edit, delete, and refresh user playlists. | Changes persist; refresh and failure cases are covered. |
+| 9 - EPG Integration | NOT STARTED | Parse XMLTV data, associate programs with channels, and show current/next programs and schedules. | Time/channel matching and parser edge cases are tested. |
+| 10 - Offline Support | NOT STARTED | Support cached startup and the planned channel, logo, and EPG caches. | Cached data is usable offline and cache failures are handled. |
+| 11 - Settings | NOT STARTED | Implement theme selection, playlist refresh, cache clearing, and app information. | Settings persist where applicable and actions have clear success/error states. |
+| 12 - Production Hardening | NOT STARTED | Complete performance and security review, required analytics/crash reporting, and release-candidate checks. | Build, tests, analysis, privacy/security review, and release-candidate checks pass. |
+| 13 - Store Deployment | NOT STARTED | Prepare Android AAB and iOS IPA, testing tracks, and store submissions. | Deliverables are ready; submit or publish only with explicit user authorization. |
 
 ## Initial Playlist Sources
 

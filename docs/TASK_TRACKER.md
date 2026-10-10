@@ -25,69 +25,69 @@ NOT STARTED
 
 # Stage 1 - Architecture Skeleton
 
-- [ ] Create Folder Structure
-- [ ] Configure Router
-- [ ] Configure Theme
-- [ ] Configure Riverpod
-- [ ] Configure Logging
-- [ ] Configure Network Layer
+- [x] Create Folder Structure
+- [x] Configure Router
+- [x] Configure Theme
+- [x] Configure Riverpod
+- [x] Configure Logging
+- [x] Configure Network Layer
 
 Status:
 
 ```text
-NOT STARTED
+COMPLETE
 ```
 
 ---
 
 # Stage 2 - Domain Models
 
-- [ ] Channel Entity
-- [ ] Playlist Entity
-- [ ] Favorite Entity
-- [ ] Program Entity
+- [x] Channel Entity
+- [x] Playlist Entity
+- [x] Favorite Entity
+- [x] Program Entity
 
-- [ ] Unit Tests
+- [x] Unit Tests
 
 Status:
 
 ```text
-NOT STARTED
+COMPLETE
 ```
 
 ---
 
 # Stage 3 - Playlist Engine
 
-- [ ] Playlist Service
-- [ ] Playlist Downloader
-- [ ] Playlist Parser
-- [ ] Playlist Validator
-- [ ] Playlist Cache
+- [x] Playlist Service
+- [x] Playlist Downloader
+- [x] Playlist Parser
+- [x] Playlist Validator
+- [x] Playlist Cache
 
-- [ ] Unit Tests
+- [x] Unit Tests
 
 Status:
 
 ```text
-NOT STARTED
+COMPLETE
 ```
 
 ---
 
 # Stage 4 - Channel Browser
 
-- [ ] Channel List
-- [ ] Open selected channel in the in-app player
-- [ ] Category Filtering
-- [ ] Search Feature
-- [ ] Empty States
-- [ ] Error Handling
+- [x] Channel List
+- [x] Open selected channel in the in-app player
+- [x] Category Filtering
+- [x] Search Feature
+- [x] Empty States
+- [x] Error Handling
 
 Status:
 
 ```text
-NOT STARTED
+COMPLETE
 ```
 
 ---
@@ -104,7 +104,7 @@ NOT STARTED
 Status:
 
 ```text
-NOT STARTED
+IN PROGRESS
 ```
 
 ---

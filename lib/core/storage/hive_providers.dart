@@ -1,0 +1,6 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+
+final playlistBoxProvider = Provider<Box<String>>((ref) {
+  return Hive.box<String>('playlists');
+});
