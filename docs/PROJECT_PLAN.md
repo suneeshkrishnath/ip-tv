@@ -25,6 +25,10 @@ Target Platforms:
 
 # 2. Goals
 
+## Core Playback Requirement
+
+The primary purpose of the app is to play live channel streams in the app on Android and iOS phones. When a user selects a channel from a loaded playlist or Favorites, open the in-app player for that channel and start its stream. Do not hand playback off to an external player or browser.
+
 ## MVP (Version 1)
 
 Users can:
@@ -32,7 +36,7 @@ Users can:
 - Load IPTV playlist
 - Browse channels
 - Search channels
-- Play video streams
+- Play live video streams inside the app from the channel list and Favorites
 - Save favorites
 
 ## Version 2
@@ -229,6 +233,7 @@ Displays:
 
 Actions:
 
+- Select a channel to open it in the in-app player
 - Search
 - Favorite
 
@@ -238,7 +243,7 @@ Actions:
 
 Displays:
 
-- Video Player
+- In-app video playback for the selected channel
 - Channel Name
 - Current Programme
 - Favorite Button
@@ -257,6 +262,7 @@ Controls:
 Shows:
 
 - Favorite channels
+- Selecting a favorite opens its live stream in the in-app player
 
 ---
 

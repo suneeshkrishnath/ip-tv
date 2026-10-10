@@ -1,4 +1,4 @@
-# AGENTS.md
+# ADENT.md
 
 Version: 1.0
 
@@ -54,7 +54,7 @@ Before implementing any feature, read the following documents in order:
 1.
 
 ```text
-docs/PRODUCT_REQUIREMENTS.md
+docs/PROJECT_PLAN.md
 ```
 
 2.
@@ -72,13 +72,13 @@ docs/ARCHITECTURE.md
 4.
 
 ```text
-docs/CODING_STANDARDS.md
+docs/CODING_STANDARD.md
 ```
 
 5.
 
 ```text
-docs/UI_GUIDELINES.md
+docs/UI_GUIDLINES.md
 ```
 
 6.
@@ -90,8 +90,9 @@ docs/TASK_TRACKER.md
 If there is a conflict:
 
 ```text
-PRODUCT_REQUIREMENTS.md
-takes precedence.
+Follow the user's latest direction. Use PROJECT_PLAN.md for product scope,
+TASK_TRACKER.md for stage order, and the relevant standards document for
+implementation details.
 ```
 
 ---

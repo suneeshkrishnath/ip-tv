@@ -78,6 +78,7 @@ NOT STARTED
 # Stage 4 - Channel Browser
 
 - [ ] Channel List
+- [ ] Open selected channel in the in-app player
 - [ ] Category Filtering
 - [ ] Search Feature
 - [ ] Empty States
@@ -94,6 +95,7 @@ NOT STARTED
 # Stage 5 - Video Player
 
 - [ ] Media Kit Integration
+- [ ] Start and play selected live stream inside the app on Android and iOS
 - [ ] Full Screen Support
 - [ ] Portrait Support
 - [ ] Landscape Support
@@ -114,6 +116,7 @@ NOT STARTED
 - [ ] Add Favorite
 - [ ] Remove Favorite
 - [ ] Favorites Screen
+- [ ] Open selected favorite in the in-app player
 
 Status:
 
@@ -242,6 +245,7 @@ NOT STARTED
 - [ ] Display Channels
 - [ ] Search Channels
 - [ ] Play Streams
+- [ ] Play streams in-app from channel list and Favorites on Android and iOS
 - [ ] Save Favorites
 - [ ] Android Build
 - [ ] iOS Build
