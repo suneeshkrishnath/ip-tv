@@ -1,0 +1,26 @@
+import 'package:go_router/go_router.dart';
+import 'package:ip_tv/features/channels/domain/models/channel.dart';
+import 'package:ip_tv/features/channels/presentation/home_screen.dart';
+import 'package:ip_tv/features/player/presentation/player_screen.dart';
+import 'package:ip_tv/shared/widgets/error_view.dart';
+
+final appRouter = GoRouter(
+  routes: [
+    GoRoute(
+      path: '/',
+      name: 'home',
+      builder: (context, state) => const HomeScreen(),
+    ),
+    GoRoute(
+      path: '/player',
+      name: 'player',
+      builder: (context, state) {
+        final channel = state.extra;
+        if (channel is! Channel) {
+          return const ErrorView(error: 'Missing channel information.');
+        }
+        return PlayerScreen(channel: channel);
+      },
+    ),
+  ],
+);
