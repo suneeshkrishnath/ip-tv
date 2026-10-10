@@ -1,425 +1,51 @@
-# IPTV Player - Implementation Plan
-
-Version: 1.0
-
-Author: Product & Engineering
-
-Status: Planned
-
-Target Platforms:
-
-- Android
-- iOS
-
-Technology Stack:
-
-- Flutter
-- Dart
-- Riverpod
-- Go Router
-- Dio
-- Hive
-- Media Kit
-- Freezed
-- Json Serializable
-
----
-
-# 1. Vision
-
-Build a modern IPTV application that allows users to:
-
-- Load public IPTV playlists
-- Manage custom playlists
-- Watch live TV streams
-- Search channels
-- Organize favorites
-- View EPG guide
-- Continue watching channels
-- Support Android and iOS from a single codebase
-
-Future versions should support:
-
-- Chromecast
-- AirPlay
-- User Accounts
-- Cloud Synchronization
-- Android TV
-- Apple TV
-
----
-
-# 2. Development Principles
-
-## Clean Architecture
-
-Every feature must follow:
-
-```text
-Presentation
-    |
-Application
-    |
-Domain
-    |
-Infrastructure
-```
-
-No UI layer should directly call network services.
-
----
-
-## Feature First Structure
-
-```text
-features/
-    channels/
-    player/
-    favorites/
-    playlists/
-    epg/
-    settings/
-```
-
-Each feature owns:
-
-```text
-data/
-domain/
-presentation/
-```
-
----
-
-# 3. Repository Structure
-
-```text
-iptv-player/
-
-docs/
-    PROJECT_PLAN.md
-    IMPLEMENTATION_PLAN.md
-
-assets/
-    images/
-    icons/
-    logos/
-
-lib/
-
-    app/
-
-    core/
-
-    shared/
-
-    features/
-
-test/
-
-integration_test/
-
-android/
-
-ios/
-```
-
----
-
-# 4. Stage 0 - Foundation Setup
-
-Goal:
-
-Create a stable project foundation before development begins.
-
-Estimated Duration:
-
-1-2 Days
-
----
-
-## Tasks
-
-### Create Repository
-
-```bash
-git init
-```
-
-Branches:
-
-```text
-main
-develop
-```
-
-Branch Naming:
-
-```text
-feature/*
-bugfix/*
-release/*
-```
-
----
-
-### Create Flutter Project
-
-```bash
-flutter create iptv_player
-```
-
----
-
-### Verify Environment
-
-```bash
-flutter doctor
-```
-
-All checks must pass.
-
----
-
-### Configure Analysis Rules
-
-Create:
-
-```text
-analysis_options.yaml
-```
-
-Enable:
-
-- strict lints
-- nullable safety checks
-
----
-
-### Setup Project Packages
-
-Add:
-
-```yaml
-flutter_riverpod
-go_router
-dio
-hive
-hive_flutter
-freezed
-freezed_annotation
-json_annotation
-json_serializable
-build_runner
-logger
-media_kit
-media_kit_video
-media_kit_libs_video
-cached_network_image
-connectivity_plus
-```
-
----
-
-### Configure Git Ignore
-
-Ignore:
-
-```text
-build/
-.dart_tool/
-.idea/
-.vscode/
-```
-
----
-
-### Setup CI/CD Pipeline
-
-GitHub Actions:
-
-```yaml
-flutter analyze
-flutter test
-```
-
-Run for each Pull Request.
-
----
-
-## Deliverables
-
-- Repository created
-- Flutter project generated
-- Packages installed
-- CI pipeline created
-
----
-
-# 5. Stage 1 - Architecture Skeleton
-
-Goal:
-
-Create base architecture.
-
-Estimated Duration:
-
-1 Day
-
----
-
-## Folder Structure
-
-```text
-lib/
-
-app/
-core/
-shared/
-features/
-```
-
----
-
-## Create Core Modules
-
-```text
-core/
-
-config/
-constants/
-theme/
-network/
-storage/
-exceptions/
-utils/
-```
-
----
-
-## Create Shared Modules
-
-```text
-shared/
-
-widgets/
-models/
-extensions/
-```
-
----
-
-## Setup Routing
-
-Create:
-
-```text
-app/router.dart
-```
-
-Routes:
-
-```text
-/
-home
-player
-favorites
-settings
-```
-
----
-
-## Create Theme System
-
-Themes:
-
-```text
-Light Theme
-Dark Theme
-```
-
-Material 3 only.
-
----
-
-## Deliverables
-
-Running application with routing and theming configured.
-
----
-
-# 6. Stage 2 - Domain Models
-
-Goal:
-
-Create reusable business entities.
-
-Estimated Duration:
-
-1 Day
-
----
-
-## Channel Entity
-
-```dart
-class Channel
-```
-
-Properties:
-
-```text
-id
-name
-logo
-group
-country
-language
-streamUrl
-```
-
----
-
-## Playlist Entity
-
-```dart
-class Playlist
-```
-
-Properties:
-
-```text
-id
-name
-url
-lastUpdated
-```
-
----
-
-## Favorite Entity
-
-```dart
-class Favorite
-```
-
-Properties:
-
-```text
-channelId
-```
-
----
-
-## Program Entity
-
-```dart
-class Program
-```
-
-Properties:
-
-```text
-title
-description
-startTime
+# Copilot Implementation Plan
+
+Use this document as the concise execution guide. Follow the existing plan; do not add, reorder, or broaden work unless the user asks.
+
+## Sources of Truth
+
+- `PROJECT_PLAN.md`: product goals, MVP, version scope, and future features.
+- `TASK_TRACKER.md`: implementation stage order, tasks, and completion status.
+- `ARCHITECTURE.md`: feature structure, layer boundaries, and technical architecture.
+- `CODING_STANDARD.md`: Dart conventions, packages, errors, and test expectations.
+- `UI_GUIDLINES.md`: visual, responsive, accessibility, and UI-state requirements.
+
+Use the filenames above exactly. Do not assume missing documents exist. If documents conflict, follow the user's latest direction; otherwise keep product scope from `PROJECT_PLAN.md`, stage order from `TASK_TRACKER.md`, and implementation rules from the relevant standards document. Ask before making a decision that materially changes scope or architecture.
+
+## Copilot Rules
+
+1. Read the relevant source documents and inspect the existing code before each task.
+2. Identify the requested feature and its current `TASK_TRACKER.md` stage. Work only on the requested stage and its necessary dependencies.
+3. Preserve Clean Architecture: presentation calls application/domain APIs, never infrastructure directly. Use Riverpod, GoRouter, Dio, Hive, Freezed, and the documented shared modules; do not introduce alternatives without approval.
+4. Implement the smallest complete, testable change. Reuse existing code and widgets; avoid unrelated refactors and speculative future features.
+5. Add or update tests for changed behavior. Cover success and failure paths; follow the documented unit/widget/integration split and 80% coverage goal.
+6. Run relevant tests and `flutter analyze`. Update the tracker and docs only when the work is verified; never mark unfinished work complete.
+7. Report what changed, checks run and their results, and any blocker or decision needed. Do not commit, publish, or submit releases unless asked.
+
+## Stages
+
+Complete stages in `TASK_TRACKER.md` order. Each stage is done only when its tasks are implemented, required tests pass, analysis is clean, and the tracker is accurately updated.
+
+| Stage | Copilot work | Completion check |
+|---|---|---|
+| 0 - Foundation | Create/verify the Flutter project, packages, analysis rules, repository setup, CI, docs, and development environment. | Flutter environment is verified; project builds and CI runs analysis/tests. |
+| 1 - Architecture Skeleton | Establish feature-first folders, centralized GoRouter, Material 3 themes, Riverpod, logging, and the Dio network layer. | App launches with routing and shared foundations configured. |
+| 2 - Domain Models | Define immutable Channel, Playlist, Favorite, and Program models using Freezed/JSON serialization as appropriate. | Model unit tests cover expected values and serialization. |
+| 3 - Playlist Engine | Implement playlist download, M3U parsing, validation, repository flow, and Hive cache with typed failures. | Valid playlists produce channels; malformed/network/cache failures are handled and tested. |
+| 4 - Channel Browser | Show channels and categories; add search, loading/error/empty states, and documented reusable UI. | Browser, filtering, search, and states work and have relevant tests. |
+| 5 - Video Player | Integrate media_kit, playback controls, fullscreen/orientation behavior, and stream error handling. | Authorized test streams play; player states and failures are tested on supported targets. |
+| 6 - Favorites | Persist add/remove operations in Hive and provide the favorites view. | Favorites survive restart and repository/UI behavior is tested. |
+| 7 - Recently Watched | Record playback history and display the most recent 20 channels. | History ordering, limit, persistence, and view are verified. |
+| 8 - Playlist Management | Add, edit, delete, and refresh user playlists. | Changes persist; refresh and failure cases are covered. |
+| 9 - EPG Integration | Parse XMLTV data, associate programs with channels, and show current/next programs and schedules. | Time/channel matching and parser edge cases are tested. |
+| 10 - Offline Support | Support cached startup and the planned channel, logo, and EPG caches. | Cached data is usable offline and cache failures are handled. |
+| 11 - Settings | Implement theme selection, playlist refresh, cache clearing, and app information. | Settings persist where applicable and actions have clear success/error states. |
+| 12 - Production Hardening | Complete performance and security review, required analytics/crash reporting, and release-candidate checks. | Build, tests, analysis, privacy/security review, and release-candidate checks pass. |
+| 13 - Store Deployment | Prepare Android AAB and iOS IPA, testing tracks, and store submissions. | Deliverables are ready; submit or publish only with explicit user authorization. |
+
+## Scope Boundaries
+
+- MVP is playlist loading, channel browsing/search, playback, and favorites, plus Android and iOS builds as listed in `PROJECT_PLAN.md` and `TASK_TRACKER.md`.
+- EPG, recently watched, offline enhancements, and other later-stage work must wait for their tracker stage or an explicit user request.
+- Accounts, cloud sync/backend, Chromecast, AirPlay, Android TV, and Apple TV are future/optional scope. Do not build them speculatively.
+- Consume only streams the user is authorized to access. Never bypass authentication, store premium streams, or re-host video streams.
