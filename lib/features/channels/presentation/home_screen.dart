@@ -5,6 +5,7 @@ import 'package:ip_tv/core/constants/initial_playlist_sources.dart';
 import 'package:ip_tv/features/channels/application/channel_providers.dart';
 import 'package:ip_tv/features/channels/domain/models/channel.dart';
 import 'package:ip_tv/features/channels/presentation/channel_card.dart';
+import 'package:ip_tv/features/favorites/application/favorite_providers.dart';
 import 'package:ip_tv/features/playlists/domain/models/playlist.dart';
 import 'package:ip_tv/features/playlists/domain/models/playlist_source.dart';
 import 'package:ip_tv/shared/widgets/app_search_bar.dart';
@@ -21,8 +22,20 @@ class HomeScreen extends ConsumerWidget {
     final playlistState = ref.watch(currentPlaylistProvider);
     final query = ref.watch(channelSearchQueryProvider);
     final selectedCategory = ref.watch(selectedChannelCategoryProvider);
+    final favoriteIds = (ref.watch(favoriteChannelsProvider).value ?? const [])
+        .map((channel) => channel.id)
+        .toSet();
     return Scaffold(
-      appBar: AppBar(title: const Text('Channels')),
+      appBar: AppBar(
+        title: const Text('Channels'),
+        actions: [
+          IconButton(
+            tooltip: 'Favorites',
+            onPressed: () => context.pushNamed('favorites'),
+            icon: const Icon(Icons.favorite_border),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -90,6 +103,7 @@ class HomeScreen extends ConsumerWidget {
                   playlist,
                   query,
                   selectedCategory,
+                  favoriteIds,
                 ),
               ),
             ),
@@ -105,6 +119,7 @@ class HomeScreen extends ConsumerWidget {
     Playlist? playlist,
     String query,
     String? selectedCategory,
+    Set<String> favoriteIds,
   ) {
     if (playlist == null) {
       return EmptyStateView(
@@ -176,7 +191,11 @@ class HomeScreen extends ConsumerWidget {
                     final channel = channels[index];
                     return ChannelCard(
                       channel: channel,
+                      isFavorite: favoriteIds.contains(channel.id),
                       onTap: () => _openPlayer(context, channel),
+                      onFavoritePressed: () => ref
+                          .read(favoriteChannelsProvider.notifier)
+                          .toggle(channel),
                     );
                   },
                 ),

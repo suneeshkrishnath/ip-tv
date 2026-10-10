@@ -111,17 +111,17 @@ IN PROGRESS
 
 # Stage 6 - Favorites
 
-- [ ] Create Favorites Repository
-- [ ] Hive Persistence
-- [ ] Add Favorite
-- [ ] Remove Favorite
-- [ ] Favorites Screen
-- [ ] Open selected favorite in the in-app player
+- [x] Create Favorites Repository
+- [x] Hive Persistence
+- [x] Add Favorite
+- [x] Remove Favorite
+- [x] Favorites Screen
+- [x] Open selected favorite in the in-app player
 
 Status:
 
 ```text
-NOT STARTED
+COMPLETE
 ```
 
 ---

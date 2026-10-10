@@ -2,15 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ip_tv/app/app.dart';
+import 'package:ip_tv/core/storage/favorite_box_provider.dart';
 import 'package:ip_tv/core/storage/hive_providers.dart';
+import 'package:media_kit/media_kit.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  MediaKit.ensureInitialized();
   await Hive.initFlutter();
   final playlistBox = await Hive.openBox<String>('playlists');
+  final favoriteBox = await Hive.openBox<String>('favorites');
   runApp(
     ProviderScope(
-      overrides: [playlistBoxProvider.overrideWithValue(playlistBox)],
+      overrides: [
+        playlistBoxProvider.overrideWithValue(playlistBox),
+        favoriteBoxProvider.overrideWithValue(favoriteBox),
+      ],
       child: const IptvApp(),
     ),
   );

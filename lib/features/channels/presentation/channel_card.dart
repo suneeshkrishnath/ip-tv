@@ -1,25 +1,28 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:ip_tv/features/channels/domain/models/channel.dart';
+import 'package:ip_tv/features/favorites/presentation/favorite_button.dart';
 
 class ChannelCard extends StatelessWidget {
   const ChannelCard({
     required this.channel,
+    required this.isFavorite,
     required this.onTap,
+    required this.onFavoritePressed,
     super.key,
   });
 
   final Channel channel;
+  final bool isFavorite;
   final VoidCallback onTap;
+  final VoidCallback onFavoritePressed;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
+      child: Padding(
           padding: const EdgeInsets.all(12),
           child: Row(
             children: [
@@ -68,10 +71,17 @@ class ChannelCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              const Icon(Icons.play_arrow),
+              FavoriteButton(
+                isFavorite: isFavorite,
+                onPressed: onFavoritePressed,
+              ),
+              IconButton(
+                tooltip: 'Play ${channel.name}',
+                onPressed: onTap,
+                icon: const Icon(Icons.play_arrow),
+              ),
             ],
           ),
-        ),
       ),
     );
   }
