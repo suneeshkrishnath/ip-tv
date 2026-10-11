@@ -3,6 +3,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 const playlistsBoxName = 'playlists';
 const favoritesBoxName = 'favorites';
+const historyBoxName = 'history';
+const settingsBoxName = 'settings';
 
 final playlistBoxProvider = Provider<Box<String>>((ref) {
   return Hive.box<String>(playlistsBoxName);
@@ -10,4 +12,12 @@ final playlistBoxProvider = Provider<Box<String>>((ref) {
 
 final favoritesBoxProvider = Provider<Box<String>>((ref) {
   return Hive.box<String>(favoritesBoxName);
+});
+
+final historyBoxProvider = Provider<Box<String>>((ref) {
+  return Hive.box<String>(historyBoxName);
+});
+
+final settingsBoxProvider = Provider<Box<String>>((ref) {
+  return Hive.box<String>(settingsBoxName);
 });

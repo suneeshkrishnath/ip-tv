@@ -5,13 +5,17 @@ import 'package:ip_tv/core/constants/initial_playlist_sources.dart';
 import 'package:ip_tv/core/result/result.dart';
 import 'package:ip_tv/features/channels/application/channel_providers.dart';
 import 'package:ip_tv/features/channels/domain/models/channel.dart';
+import 'package:ip_tv/features/disclaimer/application/disclaimer_providers.dart';
 import 'package:ip_tv/features/favorites/application/favorites_providers.dart';
 import 'package:ip_tv/features/favorites/domain/repositories/favorites_repository.dart';
+import 'package:ip_tv/features/history/application/history_providers.dart';
+import 'package:ip_tv/features/history/domain/repositories/history_repository.dart';
 import 'package:ip_tv/features/player/application/player_controller.dart';
 import 'package:ip_tv/features/playlists/application/playlist_providers.dart';
 import 'package:ip_tv/features/playlists/domain/models/playlist.dart';
 import 'package:ip_tv/features/playlists/domain/models/playlist_source.dart';
 import 'package:ip_tv/features/playlists/domain/repositories/playlist_repository.dart';
+import 'disclaimer_test.dart' show FakeDisclaimer;
 import 'player_controller_test.dart' show FakePlayerEngine;
 
 void main() {
@@ -35,6 +39,10 @@ void main() {
           _FakePlaylistRepository(playlist),
         ),
         favoritesRepositoryProvider.overrideWithValue(_FakeFavorites()),
+        historyRepositoryProvider.overrideWithValue(_FakeHistory()),
+        disclaimerAcceptedProvider.overrideWith(
+          () => FakeDisclaimer(initial: true),
+        ),
         playerEngineFactoryProvider.overrideWithValue(FakePlayerEngine.new),
       ],
     );
@@ -57,6 +65,14 @@ void main() {
     expect(find.byTooltip('Pause'), findsNothing);
     expect(find.byTooltip('Play'), findsOneWidget);
   });
+}
+
+class _FakeHistory implements HistoryRepository {
+  @override
+  Future<Result<List<Channel>>> getRecent() async => const Success([]);
+
+  @override
+  Future<Result<void>> record(Channel channel) async => const Success(null);
 }
 
 class _FakeFavorites implements FavoritesRepository {

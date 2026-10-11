@@ -27,6 +27,11 @@ class HomeScreen extends ConsumerWidget {
         title: const Text('Channels'),
         actions: [
           IconButton(
+            tooltip: 'Recently watched',
+            icon: const Icon(Icons.history),
+            onPressed: () => context.pushNamed('recent'),
+          ),
+          IconButton(
             tooltip: 'Favorites',
             icon: const Icon(Icons.favorite),
             onPressed: () => context.pushNamed('favorites'),

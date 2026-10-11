@@ -11,11 +11,15 @@ Future<void> main() async {
   await Hive.initFlutter();
   final playlistBox = await Hive.openBox<String>(playlistsBoxName);
   final favoritesBox = await Hive.openBox<String>(favoritesBoxName);
+  final historyBox = await Hive.openBox<String>(historyBoxName);
+  final settingsBox = await Hive.openBox<String>(settingsBoxName);
   runApp(
     ProviderScope(
       overrides: [
         playlistBoxProvider.overrideWithValue(playlistBox),
         favoritesBoxProvider.overrideWithValue(favoritesBox),
+        historyBoxProvider.overrideWithValue(historyBox),
+        settingsBoxProvider.overrideWithValue(settingsBox),
       ],
       child: const IptvApp(),
     ),

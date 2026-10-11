@@ -95,7 +95,7 @@ COMPLETE
 # Stage 5 - Video Player
 
 - [x] Media Kit Integration
-- [ ] Start and play selected live stream inside the app on Android and iOS
+- [x] Start and play selected live stream inside the app on Android and iOS
 - [x] Full Screen Support
 - [x] Portrait Support
 - [x] Landscape Support
@@ -104,7 +104,7 @@ COMPLETE
 Status:
 
 ```text
-IN PROGRESS
+COMPLETE
 ```
 
 ---
@@ -128,14 +128,14 @@ COMPLETE
 
 # Stage 7 - Recently Watched
 
-- [ ] History Repository
-- [ ] Save Recently Watched
-- [ ] Recently Watched Screen
+- [x] History Repository
+- [x] Save Recently Watched
+- [x] Recently Watched Screen
 
 Status:
 
 ```text
-NOT STARTED
+COMPLETE
 ```
 
 ---
