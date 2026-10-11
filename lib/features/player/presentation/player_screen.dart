@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ip_tv/core/errors/app_failure.dart';
 import 'package:ip_tv/features/channels/domain/models/channel.dart';
 import 'package:ip_tv/features/favorites/application/favorites_providers.dart';
+import 'package:ip_tv/features/history/application/history_providers.dart';
 import 'package:ip_tv/features/player/application/player_controller.dart';
 import 'package:ip_tv/shared/widgets/error_view.dart';
 
@@ -18,6 +19,14 @@ class PlayerScreen extends ConsumerStatefulWidget {
 
 class _PlayerScreenState extends ConsumerState<PlayerScreen> {
   bool _fullscreen = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(
+      () => ref.read(recentlyWatchedProvider.notifier).record(widget.channel),
+    );
+  }
 
   @override
   void dispose() {
