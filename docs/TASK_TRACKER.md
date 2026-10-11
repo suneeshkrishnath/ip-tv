@@ -142,15 +142,15 @@ COMPLETE
 
 # Stage 8 - Playlist Management
 
-- [ ] Add Playlist
-- [ ] Edit Playlist
-- [ ] Delete Playlist
-- [ ] Refresh Playlist
+- [x] Add Playlist
+- [x] Edit Playlist
+- [x] Delete Playlist
+- [x] Refresh Playlist
 
 Status:
 
 ```text
-NOT STARTED
+COMPLETE
 ```
 
 ---

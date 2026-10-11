@@ -19,6 +19,8 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedSource = ref.watch(selectedPlaylistSourceProvider);
+    final sources =
+        ref.watch(playlistSourcesProvider).value ?? initialPlaylistSources;
     final playlistState = ref.watch(currentPlaylistProvider);
     final query = ref.watch(channelSearchQueryProvider);
     final selectedCategory = ref.watch(selectedChannelCategoryProvider);
@@ -26,6 +28,11 @@ class HomeScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Channels'),
         actions: [
+          IconButton(
+            tooltip: 'Manage playlists',
+            icon: const Icon(Icons.library_add),
+            onPressed: () => context.pushNamed('playlists'),
+          ),
           IconButton(
             tooltip: 'Recently watched',
             icon: const Icon(Icons.history),
@@ -47,11 +54,12 @@ class HomeScreen extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: DropdownButtonFormField<PlaylistSource>(
+                      key: ValueKey('${selectedSource.id}-${sources.length}'),
                       initialValue: selectedSource,
                       decoration: const InputDecoration(
                         labelText: 'Playlist source',
                       ),
-                      items: initialPlaylistSources
+                      items: sources
                           .map(
                             (source) => DropdownMenuItem(
                               value: source,

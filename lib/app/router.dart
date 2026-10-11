@@ -5,6 +5,7 @@ import 'package:ip_tv/features/disclaimer/presentation/disclaimer_gate.dart';
 import 'package:ip_tv/features/favorites/presentation/favorites_screen.dart';
 import 'package:ip_tv/features/history/presentation/recently_watched_screen.dart';
 import 'package:ip_tv/features/player/presentation/player_screen.dart';
+import 'package:ip_tv/features/playlists/presentation/manage_playlists_screen.dart';
 import 'package:ip_tv/shared/widgets/error_view.dart';
 
 final appRouter = GoRouter(
@@ -19,6 +20,11 @@ final appRouter = GoRouter(
       path: '/favorites',
       name: 'favorites',
       builder: (context, state) => const FavoritesScreen(),
+    ),
+    GoRoute(
+      path: '/playlists',
+      name: 'playlists',
+      builder: (context, state) => const ManagePlaylistsScreen(),
     ),
     GoRoute(
       path: '/recent',

@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ip_tv/core/constants/initial_playlist_sources.dart';
+import 'package:ip_tv/core/errors/app_failure.dart';
 import 'package:ip_tv/core/result/result.dart';
 import 'package:ip_tv/features/channels/domain/models/channel.dart';
 import 'package:ip_tv/features/playlists/application/playlist_providers.dart';
@@ -19,6 +21,74 @@ class SelectedPlaylistSourceNotifier extends Notifier<PlaylistSource> {
   );
 
   void select(PlaylistSource source) => state = source;
+}
+
+final playlistSourcesProvider =
+    AsyncNotifierProvider<PlaylistSourcesNotifier, List<PlaylistSource>>(
+  PlaylistSourcesNotifier.new,
+);
+
+/// Built-in sources followed by user-saved playlists.
+class PlaylistSourcesNotifier extends AsyncNotifier<List<PlaylistSource>> {
+  @override
+  Future<List<PlaylistSource>> build() => _load();
+
+  Future<List<PlaylistSource>> _load() async {
+    final result = await ref.read(userPlaylistsRepositoryProvider).getAll();
+    return switch (result) {
+      Success<List<PlaylistSource>>(:final value) => [
+          ...initialPlaylistSources,
+          ...value,
+        ],
+      FailureResult<List<PlaylistSource>>(:final failure) => throw failure,
+    };
+  }
+
+  /// Returns a failure message on error, or null on success.
+  Future<AppFailure?> add({required String name, required String url}) async {
+    final result = await ref
+        .read(userPlaylistsRepositoryProvider)
+        .add(name: name, url: url);
+    return _finish(result);
+  }
+
+  Future<AppFailure?> edit(
+    PlaylistSource source, {
+    required String name,
+    required String url,
+  }) async {
+    final result = await ref
+        .read(userPlaylistsRepositoryProvider)
+        .edit(id: source.id, name: name, url: url);
+    final failure = await _finish(result);
+    if (result case Success<PlaylistSource>(:final value)) {
+      if (ref.read(selectedPlaylistSourceProvider).id == source.id) {
+        ref.read(selectedPlaylistSourceProvider.notifier).select(value);
+        ref.invalidate(currentPlaylistProvider);
+      }
+    }
+    return failure;
+  }
+
+  Future<AppFailure?> delete(PlaylistSource source) async {
+    final result =
+        await ref.read(userPlaylistsRepositoryProvider).delete(source.id);
+    final failure = await _finish(result);
+    if (result is Success<void> &&
+        ref.read(selectedPlaylistSourceProvider).id == source.id) {
+      ref
+          .read(selectedPlaylistSourceProvider.notifier)
+          .select(initialPlaylistSources.first);
+      ref.invalidate(currentPlaylistProvider);
+    }
+    return failure;
+  }
+
+  Future<AppFailure?> _finish(Result<Object?> result) async {
+    if (result is FailureResult) return result.failure;
+    state = AsyncData(await _load());
+    return null;
+  }
 }
 
 final currentPlaylistProvider = AsyncNotifierProvider<
