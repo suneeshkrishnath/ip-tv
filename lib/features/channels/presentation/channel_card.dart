@@ -7,10 +7,14 @@ class ChannelCard extends StatelessWidget {
     required this.channel,
     required this.onTap,
     super.key,
+    this.isFavorite = false,
+    this.onFavoriteToggle,
   });
 
   final Channel channel;
   final VoidCallback onTap;
+  final bool isFavorite;
+  final VoidCallback? onFavoriteToggle;
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +72,16 @@ class ChannelCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
+              if (onFavoriteToggle != null)
+                IconButton(
+                  tooltip:
+                      isFavorite ? 'Remove from favorites' : 'Add to favorites',
+                  onPressed: onFavoriteToggle,
+                  icon: Icon(
+                    isFavorite ? Icons.favorite : Icons.favorite_border,
+                    color: isFavorite ? colors.primary : null,
+                  ),
+                ),
               const Icon(Icons.play_arrow),
             ],
           ),

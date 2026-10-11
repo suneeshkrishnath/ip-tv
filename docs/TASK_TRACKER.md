@@ -94,12 +94,12 @@ COMPLETE
 
 # Stage 5 - Video Player
 
-- [ ] Media Kit Integration
+- [x] Media Kit Integration
 - [ ] Start and play selected live stream inside the app on Android and iOS
-- [ ] Full Screen Support
-- [ ] Portrait Support
-- [ ] Landscape Support
-- [ ] Error Handling
+- [x] Full Screen Support
+- [x] Portrait Support
+- [x] Landscape Support
+- [x] Error Handling
 
 Status:
 
@@ -111,17 +111,17 @@ IN PROGRESS
 
 # Stage 6 - Favorites
 
-- [ ] Create Favorites Repository
-- [ ] Hive Persistence
-- [ ] Add Favorite
-- [ ] Remove Favorite
-- [ ] Favorites Screen
-- [ ] Open selected favorite in the in-app player
+- [x] Create Favorites Repository
+- [x] Hive Persistence
+- [x] Add Favorite
+- [x] Remove Favorite
+- [x] Favorites Screen
+- [x] Open selected favorite in the in-app player
 
 Status:
 
 ```text
-NOT STARTED
+COMPLETE
 ```
 
 ---

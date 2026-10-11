@@ -5,10 +5,14 @@ import 'package:ip_tv/core/constants/initial_playlist_sources.dart';
 import 'package:ip_tv/core/result/result.dart';
 import 'package:ip_tv/features/channels/application/channel_providers.dart';
 import 'package:ip_tv/features/channels/domain/models/channel.dart';
+import 'package:ip_tv/features/favorites/application/favorites_providers.dart';
+import 'package:ip_tv/features/favorites/domain/repositories/favorites_repository.dart';
+import 'package:ip_tv/features/player/application/player_controller.dart';
 import 'package:ip_tv/features/playlists/application/playlist_providers.dart';
 import 'package:ip_tv/features/playlists/domain/models/playlist.dart';
 import 'package:ip_tv/features/playlists/domain/models/playlist_source.dart';
 import 'package:ip_tv/features/playlists/domain/repositories/playlist_repository.dart';
+import 'player_controller_test.dart' show FakePlayerEngine;
 
 void main() {
   testWidgets('selecting a channel passes it to the player route', (tester) async {
@@ -30,6 +34,8 @@ void main() {
         playlistRepositoryProvider.overrideWithValue(
           _FakePlaylistRepository(playlist),
         ),
+        favoritesRepositoryProvider.overrideWithValue(_FakeFavorites()),
+        playerEngineFactoryProvider.overrideWithValue(FakePlayerEngine.new),
       ],
     );
     addTearDown(container.dispose);
@@ -44,10 +50,26 @@ void main() {
     );
     await tester.pumpAndSettle();
     await tester.tap(find.text(channel.name));
-    await tester.pumpAndSettle();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
 
-    expect(find.text(channel.streamUrl), findsOneWidget);
+    expect(find.text(channel.name), findsWidgets);
+    expect(find.byTooltip('Pause'), findsNothing);
+    expect(find.byTooltip('Play'), findsOneWidget);
   });
+}
+
+class _FakeFavorites implements FavoritesRepository {
+  @override
+  Future<Result<List<Channel>>> getFavorites() async => const Success([]);
+
+  @override
+  Future<Result<void>> addFavorite(Channel channel) async =>
+      const Success(null);
+
+  @override
+  Future<Result<void>> removeFavorite(String channelId) async =>
+      const Success(null);
 }
 
 class _FakePlaylistRepository implements PlaylistRepository {

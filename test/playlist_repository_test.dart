@@ -130,7 +130,7 @@ class _FakeRemoteDataSource implements PlaylistRemoteDataSource {
 }
 
 class _FakeLocalDataSource implements PlaylistLocalDataSource {
-  _FakeLocalDataSource({this.cacheError, this.readError});
+  _FakeLocalDataSource({this.cacheError});
 
   final Map<String, Playlist> playlists = {};
   final Object? cacheError;

@@ -27,6 +27,15 @@ https://stream.example.test/second.m3u8
       expect(channels.last.id, 'example-news');
     });
 
+    test('accepts a header with attributes', () {
+      final channels = M3uParser().parse(
+        '#EXTM3U x-tvg-url="https://example.test/epg.xml"\n'
+        '#EXTINF:-1,Example\nhttps://example.test/live.m3u8\n',
+      );
+
+      expect(channels, hasLength(1));
+    });
+
     test('rejects content without an M3U header', () {
       expect(
         () => M3uParser().parse('https://example.test/live.m3u8'),

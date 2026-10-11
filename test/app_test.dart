@@ -5,8 +5,9 @@ import 'package:ip_tv/app/app.dart';
 void main() {
   testWidgets('app routes to the IPTV home screen', (tester) async {
     await tester.pumpWidget(const ProviderScope(child: IptvApp()));
+    await tester.pumpAndSettle();
 
-    expect(find.text('IPTV'), findsOneWidget);
+    expect(find.text('Channels'), findsOneWidget);
     expect(find.text('No playlist loaded'), findsOneWidget);
   });
 }
