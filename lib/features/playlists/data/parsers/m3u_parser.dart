@@ -14,7 +14,7 @@ class M3uParser {
           (line) => line.isNotEmpty,
           orElse: () => '',
         );
-    if (firstLine.toUpperCase() != '#EXTM3U') {
+    if (!RegExp(r'^#EXTM3U(\s|$)', caseSensitive: false).hasMatch(firstLine)) {
       throw M3uParseException('Playlist must start with #EXTM3U.');
     }
 
