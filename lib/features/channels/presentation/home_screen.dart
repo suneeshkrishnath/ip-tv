@@ -5,6 +5,7 @@ import 'package:ip_tv/core/constants/initial_playlist_sources.dart';
 import 'package:ip_tv/features/channels/application/channel_providers.dart';
 import 'package:ip_tv/features/channels/domain/models/channel.dart';
 import 'package:ip_tv/features/channels/presentation/channel_card.dart';
+import 'package:ip_tv/features/epg/application/epg_providers.dart';
 import 'package:ip_tv/features/favorites/application/favorites_providers.dart';
 import 'package:ip_tv/features/playlists/domain/models/playlist.dart';
 import 'package:ip_tv/features/playlists/domain/models/playlist_source.dart';
@@ -72,6 +73,9 @@ class HomeScreen extends ConsumerWidget {
                           ref
                               .read(selectedPlaylistSourceProvider.notifier)
                               .select(source);
+                          ref
+                              .read(currentPlaylistProvider.notifier)
+                              .showCached(source);
                         }
                       },
                     ),
@@ -141,6 +145,8 @@ class HomeScreen extends ConsumerWidget {
       );
     }
 
+    final guide = ref.watch(epgGuideProvider).value;
+    final now = DateTime.now();
     final categories = playlist.channels
         .map((channel) => channel.category)
         .where((category) => category.isNotEmpty)
@@ -155,6 +161,21 @@ class HomeScreen extends ConsumerWidget {
 
     return Column(
       children: [
+        if (ref.watch(playlistOfflineProvider))
+          MaterialBanner(
+            leading: const Icon(Icons.cloud_off),
+            content: const Text(
+              'Could not refresh. Showing saved channels.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => ref
+                    .read(currentPlaylistProvider.notifier)
+                    .loadSource(ref.read(selectedPlaylistSourceProvider)),
+                child: const Text('Retry'),
+              ),
+            ],
+          ),
         if (categories.isNotEmpty)
           SizedBox(
             height: 52,
@@ -199,6 +220,9 @@ class HomeScreen extends ConsumerWidget {
                     final channel = channels[index];
                     return ChannelCard(
                       channel: channel,
+                      nowPlaying: guide
+                          ?.currentProgram(channel.epgId, now)
+                          ?.title,
                       isFavorite: ref.watch(isFavoriteProvider(channel.id)),
                       onFavoriteToggle: () => ref
                           .read(favoritesProvider.notifier)

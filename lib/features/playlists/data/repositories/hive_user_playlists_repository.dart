@@ -35,14 +35,16 @@ class HiveUserPlaylistsRepository implements UserPlaylistsRepository {
   Future<Result<PlaylistSource>> add({
     required String name,
     required String url,
+    String? epgUrl,
   }) async {
-    final invalid = _validate(name, url);
+    final invalid = _validate(name, url, epgUrl);
     if (invalid != null) return FailureResult(invalid);
     try {
       final source = PlaylistSource(
         id: 'user-${_clock().microsecondsSinceEpoch}',
         name: name.trim(),
         url: url.trim(),
+        epgUrl: _normalizeOptional(epgUrl),
       );
       await _write([..._read(), source]);
       return Success(source);
@@ -58,8 +60,9 @@ class HiveUserPlaylistsRepository implements UserPlaylistsRepository {
     required String id,
     required String name,
     required String url,
+    String? epgUrl,
   }) async {
-    final invalid = _validate(name, url);
+    final invalid = _validate(name, url, epgUrl);
     if (invalid != null) return FailureResult(invalid);
     try {
       final sources = _read();
@@ -73,6 +76,7 @@ class HiveUserPlaylistsRepository implements UserPlaylistsRepository {
         id: id,
         name: name.trim(),
         url: url.trim(),
+        epgUrl: _normalizeOptional(epgUrl),
       );
       if (sources[index].url != updated.url) await _cache.remove(id);
       sources[index] = updated;
@@ -98,19 +102,34 @@ class HiveUserPlaylistsRepository implements UserPlaylistsRepository {
     }
   }
 
-  AppFailure? _validate(String name, String url) {
+  AppFailure? _validate(String name, String url, String? epgUrl) {
     if (name.trim().isEmpty) {
       return const PlaylistValidationFailure('Enter a playlist name.');
     }
-    final uri = Uri.tryParse(url.trim());
-    final valid = uri != null &&
+    if (!_isHttpUrl(url)) {
+      return const PlaylistValidationFailure(
+        'Enter a valid http or https playlist URL.',
+      );
+    }
+    final guide = _normalizeOptional(epgUrl);
+    if (guide != null && !_isHttpUrl(guide)) {
+      return const PlaylistValidationFailure(
+        'Enter a valid http or https guide URL, or leave it empty.',
+      );
+    }
+    return null;
+  }
+
+  String? _normalizeOptional(String? value) {
+    final trimmed = value?.trim();
+    return trimmed == null || trimmed.isEmpty ? null : trimmed;
+  }
+
+  bool _isHttpUrl(String value) {
+    final uri = Uri.tryParse(value.trim());
+    return uri != null &&
         (uri.scheme == 'http' || uri.scheme == 'https') &&
         uri.host.isNotEmpty;
-    return valid
-        ? null
-        : const PlaylistValidationFailure(
-            'Enter a valid http or https playlist URL.',
-          );
   }
 
   List<PlaylistSource> _read() {

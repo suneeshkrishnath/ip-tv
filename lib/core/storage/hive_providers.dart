@@ -5,6 +5,7 @@ const playlistsBoxName = 'playlists';
 const favoritesBoxName = 'favorites';
 const historyBoxName = 'history';
 const settingsBoxName = 'settings';
+const epgBoxName = 'epg';
 
 final playlistBoxProvider = Provider<Box<String>>((ref) {
   return Hive.box<String>(playlistsBoxName);
@@ -20,4 +21,8 @@ final historyBoxProvider = Provider<Box<String>>((ref) {
 
 final settingsBoxProvider = Provider<Box<String>>((ref) {
   return Hive.box<String>(settingsBoxName);
+});
+
+final epgBoxProvider = Provider<Box<String>>((ref) {
+  return Hive.box<String>(epgBoxName);
 });

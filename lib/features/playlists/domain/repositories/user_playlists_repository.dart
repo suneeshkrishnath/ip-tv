@@ -4,12 +4,17 @@ import 'package:ip_tv/features/playlists/domain/models/playlist_source.dart';
 abstract interface class UserPlaylistsRepository {
   Future<Result<List<PlaylistSource>>> getAll();
 
-  Future<Result<PlaylistSource>> add({required String name, required String url});
+  Future<Result<PlaylistSource>> add({
+    required String name,
+    required String url,
+    String? epgUrl,
+  });
 
   Future<Result<PlaylistSource>> edit({
     required String id,
     required String name,
     required String url,
+    String? epgUrl,
   });
 
   /// Also removes the playlist's cached channels.

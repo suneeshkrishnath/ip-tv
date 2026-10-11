@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ip_tv/core/errors/app_failure.dart';
+import 'package:ip_tv/core/utils/mask_url.dart';
 import 'package:ip_tv/features/channels/application/channel_providers.dart';
 import 'package:ip_tv/features/playlists/domain/models/playlist_source.dart';
 import 'package:ip_tv/shared/widgets/error_view.dart';
@@ -52,8 +53,12 @@ class ManagePlaylistsScreen extends ConsumerWidget {
     final state = ref.read(currentPlaylistProvider);
     final error = state.error;
     final message = error != null
-        ? (error is AppFailure ? error.message : 'Unable to refresh playlist.')
-        : '${source.name} updated (${state.value?.channels.length ?? 0} channels).';
+        ? (error is AppFailure
+            ? error.userMessage
+            : 'Unable to refresh playlist.')
+        : ref.read(playlistOfflineProvider)
+            ? 'Could not refresh ${source.name}. Showing saved channels.'
+            : '${source.name} updated (${state.value?.channels.length ?? 0} channels).';
     messenger
       ..hideCurrentSnackBar()
       ..showSnackBar(SnackBar(content: Text(message)));
@@ -70,7 +75,7 @@ class ManagePlaylistsScreen extends ConsumerWidget {
       builder: (context) => _PlaylistEditorDialog(existing: existing),
     );
     if (failure != null) {
-      messenger.showSnackBar(SnackBar(content: Text(failure.message)));
+      messenger.showSnackBar(SnackBar(content: Text(failure.userMessage)));
     }
   }
 
@@ -101,7 +106,7 @@ class ManagePlaylistsScreen extends ConsumerWidget {
     final failure =
         await ref.read(playlistSourcesProvider.notifier).delete(source);
     if (failure != null) {
-      messenger.showSnackBar(SnackBar(content: Text(failure.message)));
+      messenger.showSnackBar(SnackBar(content: Text(failure.userMessage)));
     }
   }
 }
@@ -124,7 +129,11 @@ class _PlaylistTile extends StatelessWidget {
     return ListTile(
       leading: Icon(source.isBuiltIn ? Icons.public : Icons.playlist_play),
       title: Text(source.name),
-      subtitle: Text(source.url, maxLines: 1, overflow: TextOverflow.ellipsis),
+      subtitle: Text(
+        source.isBuiltIn ? 'Built-in playlist' : maskUrl(source.url),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -164,13 +173,16 @@ class _PlaylistEditorDialog extends ConsumerStatefulWidget {
 class _PlaylistEditorDialogState extends ConsumerState<_PlaylistEditorDialog> {
   late final _name = TextEditingController(text: widget.existing?.name);
   late final _url = TextEditingController(text: widget.existing?.url);
+  late final _epgUrl = TextEditingController(text: widget.existing?.epgUrl);
   String? _error;
   bool _saving = false;
+  bool _hideUrls = true;
 
   @override
   void dispose() {
     _name.dispose();
     _url.dispose();
+    _epgUrl.dispose();
     super.dispose();
   }
 
@@ -182,8 +194,17 @@ class _PlaylistEditorDialogState extends ConsumerState<_PlaylistEditorDialog> {
     final notifier = ref.read(playlistSourcesProvider.notifier);
     final existing = widget.existing;
     final failure = existing == null
-        ? await notifier.add(name: _name.text, url: _url.text)
-        : await notifier.edit(existing, name: _name.text, url: _url.text);
+        ? await notifier.add(
+            name: _name.text,
+            url: _url.text,
+            epgUrl: _epgUrl.text,
+          )
+        : await notifier.edit(
+            existing,
+            name: _name.text,
+            url: _url.text,
+            epgUrl: _epgUrl.text,
+          );
     if (!mounted) return;
     if (failure is PlaylistValidationFailure) {
       setState(() {
@@ -212,10 +233,27 @@ class _PlaylistEditorDialogState extends ConsumerState<_PlaylistEditorDialog> {
             TextField(
               controller: _url,
               keyboardType: TextInputType.url,
+              obscureText: _hideUrls,
               decoration: InputDecoration(
                 labelText: 'M3U URL',
                 errorText: _error,
                 errorMaxLines: 2,
+                suffixIcon: IconButton(
+                  tooltip: _hideUrls ? 'Show URLs' : 'Hide URLs',
+                  icon: Icon(
+                    _hideUrls ? Icons.visibility : Icons.visibility_off,
+                  ),
+                  onPressed: () => setState(() => _hideUrls = !_hideUrls),
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _epgUrl,
+              keyboardType: TextInputType.url,
+              obscureText: _hideUrls,
+              decoration: const InputDecoration(
+                labelText: 'Guide (XMLTV) URL - optional',
               ),
             ),
           ],

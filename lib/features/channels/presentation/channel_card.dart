@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:ip_tv/core/cache/logo_cache_manager.dart';
 import 'package:ip_tv/features/channels/domain/models/channel.dart';
 
 class ChannelCard extends StatelessWidget {
@@ -9,12 +10,16 @@ class ChannelCard extends StatelessWidget {
     super.key,
     this.isFavorite = false,
     this.onFavoriteToggle,
+    this.nowPlaying,
   });
 
   final Channel channel;
   final VoidCallback onTap;
   final bool isFavorite;
   final VoidCallback? onFavoriteToggle;
+
+  /// Title of the programme airing now, when a guide is available.
+  final String? nowPlaying;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +38,7 @@ class ChannelCard extends StatelessWidget {
                     ? Icon(Icons.live_tv, color: colors.onSurfaceVariant)
                     : CachedNetworkImage(
                         imageUrl: channel.logoUrl!,
+                        cacheManager: logoCacheManager,
                         fit: BoxFit.contain,
                         placeholder: (context, url) => const Center(
                           child: SizedBox.square(
@@ -65,6 +71,17 @@ class ChannelCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               color: colors.onSurfaceVariant,
+                            ),
+                      ),
+                    ],
+                    if (nowPlaying != null) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        'Now: $nowPlaying',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: colors.primary,
                             ),
                       ),
                     ],

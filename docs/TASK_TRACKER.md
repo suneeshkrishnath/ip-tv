@@ -157,30 +157,63 @@ COMPLETE
 
 # Stage 9 - EPG Integration
 
-- [ ] XMLTV Parser
-- [ ] Current Program
-- [ ] Next Program
-- [ ] Program Schedule
+- [x] XMLTV Parser
+- [x] Current Program
+- [x] Next Program
+- [x] Program Schedule
 
 Status:
 
 ```text
-NOT STARTED
+COMPLETE
 ```
 
 ---
 
 # Stage 10 - Offline Support
 
-- [ ] Offline Startup
-- [ ] Cache Channels
-- [ ] Cache Logos
-- [ ] Cache EPG
+- [x] Offline Startup
+- [x] Cache Channels
+- [x] Cache Logos
+- [x] Cache EPG
 
 Status:
 
 ```text
-NOT STARTED
+COMPLETE
+```
+
+---
+
+# Stage 10.1 - Language Support
+
+- [x] Tamil (languages/tam.m3u)
+- [x] Kannada (languages/kan.m3u)
+- [x] Telugu (languages/tel.m3u)
+- [x] Hindi (languages/hin.m3u)
+- [x] English (languages/eng.m3u)
+- [x] Sports (categories/sports.m3u)
+
+Status:
+
+```text
+COMPLETE
+```
+
+---
+
+# Stage 10.2 - Playlist Privacy and Error Codes
+
+- [x] Mask playlist URLs in the playlist list
+- [x] Hide URLs in the add/edit form by default with a show/hide toggle
+- [x] Error codes on all failure types
+- [x] Plain-language network, playlist, guide, and playback error messages
+- [x] Unit and widget tests
+
+Status:
+
+```text
+COMPLETE
 ```
 
 ---

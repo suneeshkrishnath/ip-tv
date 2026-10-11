@@ -13,6 +13,7 @@ Future<void> main() async {
   final favoritesBox = await Hive.openBox<String>(favoritesBoxName);
   final historyBox = await Hive.openBox<String>(historyBoxName);
   final settingsBox = await Hive.openBox<String>(settingsBoxName);
+  final epgBox = await Hive.openBox<String>(epgBoxName);
   runApp(
     ProviderScope(
       overrides: [
@@ -20,6 +21,7 @@ Future<void> main() async {
         favoritesBoxProvider.overrideWithValue(favoritesBox),
         historyBoxProvider.overrideWithValue(historyBox),
         settingsBoxProvider.overrideWithValue(settingsBox),
+        epgBoxProvider.overrideWithValue(epgBox),
       ],
       child: const IptvApp(),
     ),
