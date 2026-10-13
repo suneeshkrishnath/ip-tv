@@ -37,8 +37,10 @@ Complete stages in `TASK_TRACKER.md` order. Each stage is done only when its tas
 | 6 - Favorites | COMPLETE | Persist add/remove operations in Hive and provide the favorites view. Selecting a favorite opens its stream in the in-app player. | Favorites survive restart; selecting one plays the matching channel in-app; repository/UI behavior is tested. |
 | 7 - Recently Watched | COMPLETE | Record playback history and display the most recent 20 channels. | History ordering, limit, persistence, and view are verified. |
 | 8 - Playlist Management | COMPLETE | Add, edit, delete, and refresh user playlists. | Changes persist; refresh and failure cases are covered. |
-| 9 - EPG Integration | NOT STARTED | Parse XMLTV data, associate programs with channels, and show current/next programs and schedules. | Time/channel matching and parser edge cases are tested. |
-| 10 - Offline Support | NOT STARTED | Support cached startup and the planned channel, logo, and EPG caches. | Cached data is usable offline and cache failures are handled. |
+| 9 - EPG Integration | COMPLETE | Parse XMLTV data, associate programs with channels, and show current/next programs and schedules. | Time/channel matching and parser edge cases are tested. |
+| 10 - Offline Support | COMPLETE | Support cached startup and the planned channel, logo, and EPG caches. | Cached data is usable offline and cache failures are handled. |
+| 10.1 - Language Support | COMPLETE | Add built-in Tamil, Kannada, Telugu, Hindi, English, and Sports playlists alongside Malayalam and All channels. | Each source appears in the playlist selector and Manage playlists as a built-in entry. |
+| 10.2 - Playlist Privacy and Error Codes | COMPLETE | Mask playlist URLs in the UI and show meaningful error messages with an error code. | URLs are hidden by default; every user-facing failure shows a plain-language reason and code; behavior is tested. |
 | 11 - Settings | NOT STARTED | Implement theme selection, playlist refresh, cache clearing, and app information. | Settings persist where applicable and actions have clear success/error states. |
 | 12 - Production Hardening | NOT STARTED | Complete performance and security review, required analytics/crash reporting, and release-candidate checks. | Build, tests, analysis, privacy/security review, and release-candidate checks pass. |
 | 13 - Store Deployment | NOT STARTED | Prepare Android AAB and iOS IPA, testing tracks, and store submissions. | Deliverables are ready; submit or publish only with explicit user authorization. |

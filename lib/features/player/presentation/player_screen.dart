@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ip_tv/core/errors/app_failure.dart';
 import 'package:ip_tv/features/channels/domain/models/channel.dart';
+import 'package:ip_tv/features/epg/presentation/program_panel.dart';
 import 'package:ip_tv/features/favorites/application/favorites_providers.dart';
 import 'package:ip_tv/features/history/application/history_providers.dart';
 import 'package:ip_tv/features/player/application/player_controller.dart';
@@ -45,10 +46,7 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
     );
     SystemChrome.setPreferredOrientations(
       enabled
-          ? [
-              DeviceOrientation.landscapeLeft,
-              DeviceOrientation.landscapeRight,
-            ]
+          ? [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]
           : DeviceOrientation.values,
     );
   }
@@ -87,52 +85,64 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
                 ],
               ),
         body: SafeArea(
-          child: Stack(
-            fit: StackFit.expand,
+          child: Column(
             children: [
-              controller.engine.buildVideo(),
-              if (state.status == PlayerStatus.loading)
-                const Center(child: CircularProgressIndicator()),
-              if (state.status == PlayerStatus.error)
-                ColoredBox(
-                  color: Colors.black,
-                  child: ErrorView(
-                    error: UnknownFailure(
-                      state.errorMessage ?? 'Playback failed.',
-                    ),
-                    onRetry: controller.retry,
-                  ),
-                )
-              else
-                Positioned(
-                  left: 8,
-                  right: 8,
-                  bottom: 8,
-                  child: Row(
-                    children: [
-                      IconButton.filledTonal(
-                        tooltip: isPlaying ? 'Pause' : 'Play',
-                        onPressed: controller.playOrPause,
-                        icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
-                      ),
-                      const Spacer(),
-                      IconButton.filledTonal(
-                        tooltip:
-                            _fullscreen ? 'Exit full screen' : 'Full screen',
-                        onPressed: _toggleFullscreen,
-                        icon: Icon(
-                          _fullscreen
-                              ? Icons.fullscreen_exit
-                              : Icons.fullscreen,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              Expanded(child: _buildVideoArea(state, controller, isPlaying)),
+              if (!_fullscreen) ProgramPanel(channel: channel),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildVideoArea(
+    PlayerState state,
+    PlayerController controller,
+    bool isPlaying,
+  ) {
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        controller.engine.buildVideo(),
+        if (state.status == PlayerStatus.loading)
+          const Center(child: CircularProgressIndicator()),
+        if (state.status == PlayerStatus.error)
+          ColoredBox(
+            color: Colors.black,
+            child: ErrorView(
+              error: PlaybackFailure(
+                'This channel could not be played. The stream may be offline '
+                'or unavailable.',
+                cause: state.errorMessage,
+              ),
+              onRetry: controller.retry,
+            ),
+          )
+        else
+          Positioned(
+            left: 8,
+            right: 8,
+            bottom: 8,
+            child: Row(
+              children: [
+                IconButton.filledTonal(
+                  tooltip: isPlaying ? 'Pause' : 'Play',
+                  onPressed: controller.playOrPause,
+                  icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
+                ),
+                const Spacer(),
+                IconButton.filledTonal(
+                  tooltip: _fullscreen ? 'Exit full screen' : 'Full screen',
+                  onPressed: _toggleFullscreen,
+                  icon: Icon(
+                    _fullscreen ? Icons.fullscreen_exit : Icons.fullscreen,
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
     );
   }
 }

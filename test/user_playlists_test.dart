@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
+import 'package:ip_tv/core/constants/initial_playlist_sources.dart';
 import 'package:ip_tv/core/errors/app_failure.dart';
 import 'package:ip_tv/core/result/result.dart';
 import 'package:ip_tv/features/channels/application/channel_providers.dart';
@@ -111,6 +112,30 @@ void main() {
     expect(sources.single.url, 'https://example.test/b.m3u');
   });
 
+  test('stores and validates the optional guide URL', () async {
+    final bad = await repository.add(
+      name: 'One',
+      url: 'https://example.test/a.m3u',
+      epgUrl: 'nope',
+    );
+    expect(bad, isA<FailureResult<PlaylistSource>>());
+
+    await repository.add(
+      name: 'One',
+      url: 'https://example.test/a.m3u',
+      epgUrl: ' https://example.test/guide.xml ',
+    );
+    await repository.add(
+      name: 'Two',
+      url: 'https://example.test/b.m3u',
+      epgUrl: '  ',
+    );
+
+    final sources = _sources(await repository.getAll());
+    expect(sources.first.epgUrl, 'https://example.test/guide.xml');
+    expect(sources.last.epgUrl, isNull);
+  });
+
   test('editing a missing playlist fails', () async {
     final result = await repository.edit(
       id: 'missing',
@@ -153,13 +178,17 @@ void main() {
     expect(await notifier.add(name: 'Mine', url: 'https://example.test/m.m3u'),
         isNull);
     final list = container.read(playlistSourcesProvider).value!;
-    expect(list.map((s) => s.name), ['Malayalam', 'All channels', 'Mine']);
+    expect(list.map((s) => s.name), [
+      ...initialPlaylistSources.map((s) => s.name),
+      'Mine',
+    ]);
 
     final mine = list.last;
     container.read(selectedPlaylistSourceProvider.notifier).select(mine);
     await notifier.delete(mine);
 
-    expect(container.read(playlistSourcesProvider).value, hasLength(2));
+    expect(container.read(playlistSourcesProvider).value,
+        hasLength(initialPlaylistSources.length));
     expect(container.read(selectedPlaylistSourceProvider).id, 'malayalam');
   });
 
@@ -196,7 +225,10 @@ void main() {
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
 
+    await tester.scrollUntilVisible(find.text('Mine'), 200);
     expect(find.text('Mine'), findsOneWidget);
+    expect(find.text('https://example.test/••••••••'), findsOneWidget);
+    expect(find.text('https://example.test/m.m3u'), findsNothing);
   });
 }
 
@@ -210,6 +242,7 @@ class _MemorySources implements UserPlaylistsRepository {
   Future<Result<PlaylistSource>> add({
     required String name,
     required String url,
+    String? epgUrl,
   }) async {
     if (!url.startsWith('https://')) {
       return const FailureResult(
@@ -226,6 +259,7 @@ class _MemorySources implements UserPlaylistsRepository {
     required String id,
     required String name,
     required String url,
+    String? epgUrl,
   }) async => throw UnimplementedError();
 
   @override

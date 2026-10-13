@@ -39,18 +39,25 @@ class PlaylistRepositoryImpl implements PlaylistRepository {
       _validator.validate(channels);
     } on DioException catch (error, stackTrace) {
       appLogger.e('Playlist download failed', error: error, stackTrace: stackTrace);
-      return FailureResult(
-        NetworkFailure('Unable to download ${source.name}.', cause: error),
-      );
+      return FailureResult(NetworkFailure.fromDio(
+        'Unable to download ${source.name}',
+        error,
+      ));
     } on M3uParseException catch (error, stackTrace) {
       appLogger.e('Playlist parsing failed', error: error, stackTrace: stackTrace);
       return FailureResult(
-        PlaylistParsingFailure(error.message, cause: error),
+        PlaylistParsingFailure(
+          '${source.name} is not a valid M3U playlist. ${error.message}',
+          cause: error,
+        ),
       );
     } on PlaylistValidationException catch (error, stackTrace) {
       appLogger.e('Playlist validation failed', error: error, stackTrace: stackTrace);
       return FailureResult(
-        PlaylistValidationFailure(error.message, cause: error),
+        PlaylistValidationFailure(
+          '${source.name} has no playable channels. ${error.message}',
+          cause: error,
+        ),
       );
     } catch (error, stackTrace) {
       appLogger.e('Unexpected playlist failure', error: error, stackTrace: stackTrace);

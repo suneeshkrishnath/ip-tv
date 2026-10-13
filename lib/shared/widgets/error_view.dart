@@ -14,7 +14,7 @@ class ErrorView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final message = error is AppFailure
-        ? (error as AppFailure).message
+        ? (error as AppFailure).userMessage
         : 'Something went wrong while loading channels.';
     return Center(
       child: Padding(

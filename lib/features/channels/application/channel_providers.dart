@@ -45,10 +45,14 @@ class PlaylistSourcesNotifier extends AsyncNotifier<List<PlaylistSource>> {
   }
 
   /// Returns a failure message on error, or null on success.
-  Future<AppFailure?> add({required String name, required String url}) async {
+  Future<AppFailure?> add({
+    required String name,
+    required String url,
+    String? epgUrl,
+  }) async {
     final result = await ref
         .read(userPlaylistsRepositoryProvider)
-        .add(name: name, url: url);
+        .add(name: name, url: url, epgUrl: epgUrl);
     return _finish(result);
   }
 
@@ -56,10 +60,11 @@ class PlaylistSourcesNotifier extends AsyncNotifier<List<PlaylistSource>> {
     PlaylistSource source, {
     required String name,
     required String url,
+    String? epgUrl,
   }) async {
     final result = await ref
         .read(userPlaylistsRepositoryProvider)
-        .edit(id: source.id, name: name, url: url);
+        .edit(id: source.id, name: name, url: url, epgUrl: epgUrl);
     final failure = await _finish(result);
     if (result case Success<PlaylistSource>(:final value)) {
       if (ref.read(selectedPlaylistSourceProvider).id == source.id) {
@@ -97,18 +102,52 @@ final currentPlaylistProvider = AsyncNotifierProvider<
 >(CurrentPlaylistNotifier.new);
 
 class CurrentPlaylistNotifier extends AsyncNotifier<Playlist?> {
+  /// Starts from the cached playlist so the app works offline.
   @override
-  Future<Playlist?> build() async => null;
+  Future<Playlist?> build() =>
+      _cached(ref.read(selectedPlaylistSourceProvider));
 
+  Future<Playlist?> _cached(PlaylistSource source) async {
+    final result =
+        await ref.read(playlistRepositoryProvider).getCachedPlaylist(source.id);
+    return result is Success<Playlist?> ? result.value : null;
+  }
+
+  Future<void> showCached(PlaylistSource source) async {
+    final cached = await _cached(source);
+    ref.read(playlistOfflineProvider.notifier).set(false);
+    state = AsyncData(cached);
+  }
+
+  /// Falls back to the cached playlist when the download fails.
   Future<void> loadSource(PlaylistSource source) async {
     state = const AsyncLoading();
     final result = await ref.read(playlistRepositoryProvider).loadPlaylist(source);
-    state = switch (result) {
-      Success<Playlist>(:final value) => AsyncData(value),
-      FailureResult<Playlist>(:final failure) =>
-        AsyncError(failure, StackTrace.current),
-    };
+    switch (result) {
+      case Success<Playlist>(:final value):
+        ref.read(playlistOfflineProvider.notifier).set(false);
+        state = AsyncData(value);
+      case FailureResult<Playlist>(:final failure):
+        final cached = await _cached(source);
+        if (cached != null) {
+          ref.read(playlistOfflineProvider.notifier).set(true);
+          state = AsyncData(cached);
+        } else {
+          state = AsyncError(failure, StackTrace.current);
+        }
+    }
   }
+}
+
+/// True when the shown playlist is saved data because refreshing failed.
+final playlistOfflineProvider =
+    NotifierProvider<PlaylistOfflineNotifier, bool>(PlaylistOfflineNotifier.new);
+
+class PlaylistOfflineNotifier extends Notifier<bool> {
+  @override
+  bool build() => false;
+
+  void set(bool value) => state = value;
 }
 
 final channelSearchQueryProvider = NotifierProvider<
