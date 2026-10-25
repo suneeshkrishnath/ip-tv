@@ -220,15 +220,15 @@ COMPLETE
 
 # Stage 11 - Settings
 
-- [ ] Theme Selection
-- [ ] Refresh Playlist
-- [ ] Clear Cache
-- [ ] App Information
+- [x] Theme Selection
+- [x] Refresh Playlist
+- [x] Clear Cache
+- [x] App Information
 
 Status:
 
 ```text
-NOT STARTED
+IN PROGRESS
 ```
 
 ---

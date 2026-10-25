@@ -35,6 +35,9 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text(disclaimerTitle), findsOneWidget);
+    expect(find.text(disclaimerMessage), findsOneWidget);
+    expect(find.text(disclaimerCheckboxLabel), findsOneWidget);
+    expect(find.text(disclaimerConfirmLabel), findsOneWidget);
     FilledButton button() =>
         tester.widget<FilledButton>(find.byType(FilledButton));
     expect(button().onPressed, isNull);

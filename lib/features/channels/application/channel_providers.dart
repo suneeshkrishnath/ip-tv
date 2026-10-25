@@ -7,10 +7,10 @@ import 'package:ip_tv/features/playlists/application/playlist_providers.dart';
 import 'package:ip_tv/features/playlists/domain/models/playlist.dart';
 import 'package:ip_tv/features/playlists/domain/models/playlist_source.dart';
 
-final selectedPlaylistSourceProvider = NotifierProvider<
-  SelectedPlaylistSourceNotifier,
-  PlaylistSource
->(SelectedPlaylistSourceNotifier.new);
+final selectedPlaylistSourceProvider =
+    NotifierProvider<SelectedPlaylistSourceNotifier, PlaylistSource>(
+      SelectedPlaylistSourceNotifier.new,
+    );
 
 class SelectedPlaylistSourceNotifier extends Notifier<PlaylistSource> {
   @override
@@ -25,8 +25,8 @@ class SelectedPlaylistSourceNotifier extends Notifier<PlaylistSource> {
 
 final playlistSourcesProvider =
     AsyncNotifierProvider<PlaylistSourcesNotifier, List<PlaylistSource>>(
-  PlaylistSourcesNotifier.new,
-);
+      PlaylistSourcesNotifier.new,
+    );
 
 /// Built-in sources followed by user-saved playlists.
 class PlaylistSourcesNotifier extends AsyncNotifier<List<PlaylistSource>> {
@@ -37,9 +37,9 @@ class PlaylistSourcesNotifier extends AsyncNotifier<List<PlaylistSource>> {
     final result = await ref.read(userPlaylistsRepositoryProvider).getAll();
     return switch (result) {
       Success<List<PlaylistSource>>(:final value) => [
-          ...initialPlaylistSources,
-          ...value,
-        ],
+        ...initialPlaylistSources,
+        ...value,
+      ],
       FailureResult<List<PlaylistSource>>(:final failure) => throw failure,
     };
   }
@@ -76,8 +76,9 @@ class PlaylistSourcesNotifier extends AsyncNotifier<List<PlaylistSource>> {
   }
 
   Future<AppFailure?> delete(PlaylistSource source) async {
-    final result =
-        await ref.read(userPlaylistsRepositoryProvider).delete(source.id);
+    final result = await ref
+        .read(userPlaylistsRepositoryProvider)
+        .delete(source.id);
     final failure = await _finish(result);
     if (result is Success<void> &&
         ref.read(selectedPlaylistSourceProvider).id == source.id) {
@@ -96,10 +97,10 @@ class PlaylistSourcesNotifier extends AsyncNotifier<List<PlaylistSource>> {
   }
 }
 
-final currentPlaylistProvider = AsyncNotifierProvider<
-  CurrentPlaylistNotifier,
-  Playlist?
->(CurrentPlaylistNotifier.new);
+final currentPlaylistProvider =
+    AsyncNotifierProvider<CurrentPlaylistNotifier, Playlist?>(
+      CurrentPlaylistNotifier.new,
+    );
 
 class CurrentPlaylistNotifier extends AsyncNotifier<Playlist?> {
   /// Starts from the cached playlist so the app works offline.
@@ -108,8 +109,9 @@ class CurrentPlaylistNotifier extends AsyncNotifier<Playlist?> {
       _cached(ref.read(selectedPlaylistSourceProvider));
 
   Future<Playlist?> _cached(PlaylistSource source) async {
-    final result =
-        await ref.read(playlistRepositoryProvider).getCachedPlaylist(source.id);
+    final result = await ref
+        .read(playlistRepositoryProvider)
+        .getCachedPlaylist(source.id);
     return result is Success<Playlist?> ? result.value : null;
   }
 
@@ -119,10 +121,14 @@ class CurrentPlaylistNotifier extends AsyncNotifier<Playlist?> {
     state = AsyncData(cached);
   }
 
+  void clearVisiblePlaylist() => state = const AsyncData(null);
+
   /// Falls back to the cached playlist when the download fails.
   Future<void> loadSource(PlaylistSource source) async {
     state = const AsyncLoading();
-    final result = await ref.read(playlistRepositoryProvider).loadPlaylist(source);
+    final result = await ref
+        .read(playlistRepositoryProvider)
+        .loadPlaylist(source);
     switch (result) {
       case Success<Playlist>(:final value):
         ref.read(playlistOfflineProvider.notifier).set(false);
@@ -140,8 +146,9 @@ class CurrentPlaylistNotifier extends AsyncNotifier<Playlist?> {
 }
 
 /// True when the shown playlist is saved data because refreshing failed.
-final playlistOfflineProvider =
-    NotifierProvider<PlaylistOfflineNotifier, bool>(PlaylistOfflineNotifier.new);
+final playlistOfflineProvider = NotifierProvider<PlaylistOfflineNotifier, bool>(
+  PlaylistOfflineNotifier.new,
+);
 
 class PlaylistOfflineNotifier extends Notifier<bool> {
   @override
@@ -150,10 +157,10 @@ class PlaylistOfflineNotifier extends Notifier<bool> {
   void set(bool value) => state = value;
 }
 
-final channelSearchQueryProvider = NotifierProvider<
-  ChannelSearchQueryNotifier,
-  String
->(ChannelSearchQueryNotifier.new);
+final channelSearchQueryProvider =
+    NotifierProvider<ChannelSearchQueryNotifier, String>(
+      ChannelSearchQueryNotifier.new,
+    );
 
 class ChannelSearchQueryNotifier extends Notifier<String> {
   @override
@@ -162,10 +169,10 @@ class ChannelSearchQueryNotifier extends Notifier<String> {
   void update(String query) => state = query;
 }
 
-final selectedChannelCategoryProvider = NotifierProvider<
-  SelectedChannelCategoryNotifier,
-  String?
->(SelectedChannelCategoryNotifier.new);
+final selectedChannelCategoryProvider =
+    NotifierProvider<SelectedChannelCategoryNotifier, String?>(
+      SelectedChannelCategoryNotifier.new,
+    );
 
 class SelectedChannelCategoryNotifier extends Notifier<String?> {
   @override
@@ -180,11 +187,15 @@ List<Channel> filterChannels(
   String? category,
 }) {
   final normalizedQuery = query.trim().toLowerCase();
-  return channels.where((channel) {
-    final matchesCategory = category == null || channel.category == category;
-    final matchesQuery = normalizedQuery.isEmpty ||
-        channel.name.toLowerCase().contains(normalizedQuery) ||
-        channel.category.toLowerCase().contains(normalizedQuery);
-    return matchesCategory && matchesQuery;
-  }).toList(growable: false);
+  return channels
+      .where((channel) {
+        final matchesCategory =
+            category == null || channel.category == category;
+        final matchesQuery =
+            normalizedQuery.isEmpty ||
+            channel.name.toLowerCase().contains(normalizedQuery) ||
+            channel.category.toLowerCase().contains(normalizedQuery);
+        return matchesCategory && matchesQuery;
+      })
+      .toList(growable: false);
 }

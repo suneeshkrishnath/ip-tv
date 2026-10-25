@@ -1,11 +1,13 @@
 import 'package:go_router/go_router.dart';
 import 'package:ip_tv/features/channels/domain/models/channel.dart';
-import 'package:ip_tv/features/channels/presentation/home_screen.dart';
+import 'package:ip_tv/features/channels/presentation/category_channels_screen.dart';
+import 'package:ip_tv/features/channels/presentation/home_dashboard_screen.dart';
 import 'package:ip_tv/features/disclaimer/presentation/disclaimer_gate.dart';
 import 'package:ip_tv/features/favorites/presentation/favorites_screen.dart';
 import 'package:ip_tv/features/history/presentation/recently_watched_screen.dart';
 import 'package:ip_tv/features/player/presentation/player_screen.dart';
 import 'package:ip_tv/features/playlists/presentation/manage_playlists_screen.dart';
+import 'package:ip_tv/features/settings/presentation/settings_screen.dart';
 import 'package:ip_tv/shared/widgets/error_view.dart';
 
 final appRouter = GoRouter(
@@ -14,7 +16,14 @@ final appRouter = GoRouter(
       path: '/',
       name: 'home',
       builder: (context, state) =>
-          const DisclaimerGate(child: HomeScreen()),
+          const DisclaimerGate(child: HomeDashboardScreen()),
+    ),
+    GoRoute(
+      path: '/channels/:category',
+      name: 'channels',
+      builder: (context, state) => CategoryChannelsScreen(
+        category: state.pathParameters['category'] ?? 'all',
+      ),
     ),
     GoRoute(
       path: '/favorites',
@@ -30,6 +39,11 @@ final appRouter = GoRouter(
       path: '/recent',
       name: 'recent',
       builder: (context, state) => const RecentlyWatchedScreen(),
+    ),
+    GoRoute(
+      path: '/settings',
+      name: 'settings',
+      builder: (context, state) => const SettingsScreen(),
     ),
     GoRoute(
       path: '/player',

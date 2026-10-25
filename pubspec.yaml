@@ -49,6 +49,7 @@ dependencies:
   media_kit_libs_video: ^1.0.7
   logger: ^2.8.0
   xml: ^7.0.1
+  package_info_plus: ^9.0.0
 
 dev_dependencies:
   flutter_test:

@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ip_tv/features/disclaimer/application/disclaimer_providers.dart';
 
-const disclaimerTitle = '😂 ഒരു ചെറിയ മുന്നറിയിപ്പ്! 📺👀';
+const disclaimerTitle = 'Disclaimer';
 const disclaimerMessage =
-    'ടിവി കണ്ടോ, കണ്ടോ… മണിക്കൂറുകളോളം കണ്ണും തുറിച്ച് ഇരുന്ന് കണ്ണിന് വല്ല പണിയും '
-    'കിട്ടിയാൽ, അതിന് എന്നെ കുറ്റം പറയാൻ വരല്ലേട്ടോ! 🤣\n\n'
-    'കണ്ണ് നിങ്ങളുടേത്, ടിവി കാണുന്നത് നിങ്ങള്, ഉത്തരവാദിത്തവും നിങ്ങള് തന്നെ! 😜 '
-    'ഇടയ്ക്കൊക്കെ കണ്ണിന് വിശ്രമം കൊടുക്കണം, കേട്ടോ… അല്ലെങ്കിൽ പിന്നെ എന്നോട് '
-    'പരാതി പറഞ്ഞിട്ട് കാര്യമില്ല! 😂';
-const disclaimerCheckboxLabel = 'ഞാൻ മനസ്സിലാക്കി';
-const disclaimerConfirmLabel = 'ശരി';
+    'This app is a media player and does not provide, host, or control the '
+    'channels, streams, playlists, or programme information accessed through '
+    'it. You are responsible for ensuring that you have the right to access '
+    'and view any content you add or play, and for complying with applicable '
+    'laws. Content and services may be provided by third parties; the app '
+    'does not endorse them and cannot guarantee their availability, accuracy, '
+    'legality, or suitability. The app’s developers are not responsible for '
+    'third-party content or services, or for your use of them.';
+const disclaimerCheckboxLabel = 'I have read and agree';
+const disclaimerConfirmLabel = 'Continue';
 
 /// Shows the disclaimer once until the user confirms it.
 class DisclaimerGate extends ConsumerStatefulWidget {

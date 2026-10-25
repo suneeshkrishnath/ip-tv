@@ -41,9 +41,35 @@ Complete stages in `TASK_TRACKER.md` order. Each stage is done only when its tas
 | 10 - Offline Support | COMPLETE | Support cached startup and the planned channel, logo, and EPG caches. | Cached data is usable offline and cache failures are handled. |
 | 10.1 - Language Support | COMPLETE | Add built-in Tamil, Kannada, Telugu, Hindi, English, and Sports playlists alongside Malayalam and All channels. | Each source appears in the playlist selector and Manage playlists as a built-in entry. |
 | 10.2 - Playlist Privacy and Error Codes | COMPLETE | Mask playlist URLs in the UI and show meaningful error messages with an error code. | URLs are hidden by default; every user-facing failure shows a plain-language reason and code; behavior is tested. |
-| 11 - Settings | NOT STARTED | Implement theme selection, playlist refresh, cache clearing, and app information. | Settings persist where applicable and actions have clear success/error states. |
+| 11 - Settings | IN PROGRESS | Implement theme selection, playlist refresh, cache clearing, and app information. | Settings persist where applicable and actions have clear success/error states; analyzer is clean. |
 | 12 - Production Hardening | NOT STARTED | Complete performance and security review, required analytics/crash reporting, and release-candidate checks. | Build, tests, analysis, privacy/security review, and release-candidate checks pass. |
 | 13 - Store Deployment | NOT STARTED | Prepare Android AAB and iOS IPA, testing tracks, and store submissions. | Deliverables are ready; submit or publish only with explicit user authorization. |
+
+## Home Screen Design Brief
+
+Use the supplied two-screen mobile mockup as the visual reference for the home and channel-browsing redesign.
+
+### Home
+
+- Keep a compact brand header with search and Settings actions.
+- Place a prominent playlist/category selector near the top. Selecting a source opens the channel-browsing screen for that source.
+- Show Favorites as a horizontally scrollable shelf of compact channel tiles with logo, name, category, and a favorite toggle. Tapping a tile opens playback; “View all” opens the Favorites screen.
+- Show Browse by Category as a two-column grid of colorful, icon-led category tiles. Selecting a tile opens the channel-browsing screen filtered to that category.
+- Put Recently Watched below the category grid as a horizontal shelf of compact channel tiles. Tapping a tile resumes that channel in the in-app player; “View all” opens the history screen.
+- Retain playlist loading/refresh, playlist management, Favorites, Recently Watched, and Settings access.
+
+### Channel Browsing
+
+- Open as a dedicated screen with a back action, selected playlist/category title, search, and category filter controls.
+- Show horizontally scrollable category chips, including “All”, followed by a dense, vertically scrollable channel list with logo, name, category, favorite toggle, and playback action.
+- Use only playback state or guide data to indicate that a channel is live; do not infer live status from a playlist entry.
+- Preserve loading, empty, network/offline, and playback-navigation behavior.
+
+### Responsive and Interaction Notes
+
+- Keep tile dimensions stable and text ellipsized so logos and controls do not shift as content changes.
+- Allow the home shelves to scroll horizontally and the page vertically; avoid nesting independently scrolling vertical lists.
+- Preserve keyboard, touch-target, and screen-reader accessibility for selectors, category tiles, favorite toggles, and channel rows.
 
 ## Initial Playlist Sources
 
